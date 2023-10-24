@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import './Registration.css';
+import axios from 'axios';
+import { useNavigate   } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Registration() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [username, setUsername] = useState('');
+
+  const navigate = useNavigate();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -23,17 +29,40 @@ function Registration() {
     setUsername(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // Itt ellenőrizheted az űrlap adatok helyességét és végrehajthatod a regisztrációt.
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('Confirm Password:', confirmPassword);
-    console.log('Username:', username);
+    // Create a user object with the form data
+    const user = {
+      email,
+      password,
+      confirmPassword,
+      username,
+    };
+
+    
+    axios.post('http://localhost:8080/registration', user) 
+      .then((response) => {
+        console.log('Registration successful:', response.data);
+        if(response.status === 200){
+          navigate('/')
+        }else if(response.status === 409){
+          toast.error(response.data, {
+            position: 'top-center',
+            autoClose: 5000, 
+          });
+        }
+      })
+      .catch((error) => {
+        toast.error(error, {
+          position: 'top-center',
+          autoClose: 5000, // Adjust the duration
+        });
+      });
   };
 
   return (
     <div className="registration-container">
+       <ToastContainer />
       <h2>Regisztráció</h2>
       <form onSubmit={handleSubmit}>
         <div className="input-container">
@@ -86,17 +115,7 @@ function Registration() {
         </div>
         <button type="submit" className="submit-button">Regisztráció</button>
       </form>
-      <div className="gmail-registration">
-        <p>Regisztráció Gmail-el:</p>
-        <button onClick={registerWithGmail} className="gmail-button">Gmail regisztráció</button>
-      </div>
     </div>
   );
 }
-
-function registerWithGmail() {
-  // Ide írd meg a Gmail regisztráció logikát, például OAuth használatával.
-  console.log('Regisztráció Gmail-el...');
-}
-
 export default Registration;

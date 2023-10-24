@@ -1,41 +1,56 @@
-import React from 'react';
-
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Group.css';
 
 function Group() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const groupId = searchParams.get('id');
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); // Használjuk a useNavigate hookot
+  interface Item {
+    title: string;
+    value: number;
+  }
+
+  const [groupData, setGroupData] = useState<{ groupName: string; items: Item[] } | null>(null);
+
+  useEffect(() => {
+    // Küldj egy GET kérést a Spring szervernek az adatok lekéréséhez
+    axios.get(`http://localhost:8080/groupData/${groupId}`)
+      .then((response) => {
+        console.log('Group data:', response.data);
+        setGroupData(response.data);
+      })
+      .catch((error) => {
+        console.error('Failed to fetch group data:', error);
+      });
+  }, [groupId]);
 
   const handleCircleButtonClick = () => {
-    // Átnavigálás a "/newitem" útvonalra
     navigate('/newitem');
   };
-  // Az "item"-ek adatait egy tömbben tároljuk
-  const itemsData = [
-    { title: 'Item 1', value: 50 },
-    { title: 'Item 2', value: 75 },
-    { title: 'Item 3', value: 30 },    
-    { title: 'Item 3', value: 30 },
-    // ... további elemek
-  ];
+
+  if (groupData === null) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div>
-       <h1>USA Trip</h1>
+      <h1>{groupData.groupName}</h1>
       <h2>Total dues: 200 USD</h2>
       <div className='item-container'>
-        {itemsData.map((item, index) => (
+        {groupData.items.map((item, index) => (
           <div className='item' key={index}>
             <div className='item-title'>{item.title}</div>
             <div className='item-value'>{item.value} USD</div>
           </div>
         ))}
         <div className="circle-button" onClick={handleCircleButtonClick}>
-        <div className="plus">+</div>
-    </div>
+          <div className="plus">+</div>
+        </div>
       </div>
-      
     </div>
   );
 }

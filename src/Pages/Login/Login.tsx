@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import './Login.css'; 
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -13,13 +17,37 @@ function Login() {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const navigate = useNavigate();
+  
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // Itt ellenőrizheted az email és jelszó helyességét és végrehajthatod a bejelentkezést.
-    console.log('Email:', email);
-    console.log('Password:', password);
-  };
+    // Create a user object with the form data
+    const user = {
+      email,
+      password,
+    };
 
+    
+    axios.post('http://localhost:8080/login', user) 
+      .then((response) => {
+        if(response.status === 202){
+          navigate('/Home')
+          localStorage.setItem("username", response.data.username)
+        }else if(response.status === 204){
+          toast.error(response.status, {
+            position: 'top-center',
+            autoClose: 5000, // Adjust the duration
+          
+          });
+        }
+      })
+      .catch((error) => {
+        toast.error(error, {
+          position: 'top-center',
+          autoClose: 5000, // Adjust the duration
+        });
+      });
+  };
   return (
     <div className="login-container">
       <div className="header">Bejelentkezés</div>
@@ -50,17 +78,13 @@ function Login() {
         </div>
         <button type="submit" className="submit-button">Bejelentkezés</button>
       </form>
-      <div className="gmail-login">
-        <p>Bejelentkezés Gmail-el:</p>
-        <button onClick={loginWithGmail} className="gmail-button">Gmail bejelentkezés</button>
-      </div>
+      <Link to="/Registration">
+        <button className="submit-button">Registráció</button>
+      </Link>
     </div>
   );
 }
 
-function loginWithGmail() {
-  // Ide írd meg a Gmail bejelentkezési logikát, például OAuth használatával.
-  console.log('Bejelentkezés Gmail-el...');
-}
+
 
 export default Login;
