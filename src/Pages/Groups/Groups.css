@@ -52,3 +52,20 @@ h2{
     font-size: 60px;
     color: white; 
 }
+
+.newGroup{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+    color: #4C489D;
+    box-shadow: 0px 1px 1px #5C5696;
+}
+
+.newGroup:hover{
+    background-color: #fff;
+}

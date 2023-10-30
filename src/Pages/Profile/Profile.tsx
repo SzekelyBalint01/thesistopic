@@ -1,11 +1,11 @@
 import React, { FormEvent, useState } from 'react';
-import './Registration.css';
+import './Profile.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Registration() {
+function Profile() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -146,4 +146,4 @@ function Registration() {
     </div>
   );
 }
-export default Registration;
+export default Profile;
