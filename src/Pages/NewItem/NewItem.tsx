@@ -1,57 +1,94 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './NewItem.css';
+import { useLocation, Navigate, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+interface User {
+  id: number;
+  username: string;
+}
 
 function NewItem() {
-  // State változók az input mezők állapotának tárolásához
   const [name, setName] = useState('');
-  const [value, setValue] = useState<number | ''>(''); // Az érték típusát itt állítjuk be
+  const [value, setValue] = useState<number | ''>('');
   const [description, setDescription] = useState('');
-  const [selectedTag, setSelectedTag] = useState<string>('');
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedUser, setSelectedTag] = useState<string>('');
+  const [selectedUsers, setSelectedTags] = useState<string[]>([]);
+  const [currency, setCurrency] = useState<string>('');
+  const [googleMapsUrl, setGoogleMapsUrl] = useState<string>('');
+  const location = useLocation();
+  const usersList: User[] = location.state ? location.state.userList : [];
+  const groupId = localStorage.getItem('groupId');
+  const [selectedPayer, setSelectedPayer] = useState<number | ''>('');
 
-  // Alapértelmezett tagok
-  const defaultTags = ['Tag1', 'Tag2', 'Tag3'];
+  const navigate = useNavigate();
 
-  // Tag hozzáadása a kiválasztott tagokhoz
   const addTag = () => {
-    if (selectedTag && !selectedTags.includes(selectedTag)) {
-      setSelectedTags([...selectedTags, selectedTag]);
+    if (selectedUser && !selectedUsers.includes(selectedUser)) {
+      setSelectedTags([...selectedUsers, selectedUser]);
       setSelectedTag('');
     }
   };
 
-  // Tag törlése a kiválasztott tagok közül
   const removeTag = (tagToRemove: string) => {
-    const updatedTags = selectedTags.filter((tag) => tag !== tagToRemove);
+    const updatedTags = selectedUsers.filter((tag) => tag !== tagToRemove);
     setSelectedTags(updatedTags);
   };
 
-  // Az űrlap beküldése
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Új elem létrehozása a beküldött adatokkal és a kiválasztott tagokkal
+    const extractedUserIds = usersList.map((user) => user.id);
+
     const newItemData = {
-      title: name,
-      value: Number(value), // Az értéket itt számmá alakítjuk át
+      groupId: groupId,
+      name: name,
+      price: Number(value),
       description: description,
-      tags: selectedTags,
+      users: extractedUserIds,
+      currency: currency,
+      mapUrl: googleMapsUrl,
+      paidBy: selectedPayer !== '' ? selectedPayer : null,
     };
 
-    // Az új elem feldolgozása (pl. adatbázisba mentés)
-    console.log('Új elem:', newItemData);
+    axios
+      .post('http://localhost:8080/createItem', newItemData)
+      .then((response) => {
+        console.log('New Item Successful:', response.data);
+        if (response.status === 200) {
+          navigate('/Group');
+        } else if (response.status === 409) {
+          toast.error(response.data, {
+            position: 'top-center',
+            autoClose: 5000,
+          });
+        }
+      })
+      .catch((error) => {
+        toast.error(error, {
+          position: 'top-center',
+          autoClose: 5000,
+        });
+      });
 
-    // Űrlap mezők visszaállítása
+    console.log('New item:', newItemData);
+
+    // Reset form fields and selected users
     setName('');
     setValue('');
     setDescription('');
     setSelectedTag('');
     setSelectedTags([]);
+    setCurrency('');
+    setGoogleMapsUrl('');
+    setSelectedPayer('');
   };
 
   return (
     <div>
-      <h1>Új elem hozzáadása</h1>
+      <h1>New Item</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Név:</label>
@@ -64,9 +101,9 @@ function NewItem() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="value">Érték:</label>
+          <label htmlFor="value">Price:</label>
           <input
-            type="number" // Az érték típusát itt állítjuk be
+            type="number"
             id="value"
             value={value}
             onChange={(e) => {
@@ -77,7 +114,7 @@ function NewItem() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="description">Leírás:</label>
+          <label htmlFor="description">Description:</label>
           <textarea
             id="description"
             value={description}
@@ -85,42 +122,82 @@ function NewItem() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="tags">Tagok:</label>
+          <label htmlFor="tags">Users:</label>
           <select
             id="tags"
-            value={selectedTag}
+            value={selectedUser}
             onChange={(e) => setSelectedTag(e.target.value)}
           >
             <option value="" disabled>
-              Válassz egyet...
+              Select...
             </option>
-            {defaultTags.map((tag, index) => (
-              <option key={index} value={tag}>
-                {tag}
+            {usersList.map((user) => (
+              <option key={user.id} value={user.username}>
+                {user.username}
               </option>
             ))}
           </select>
           <button type="button" onClick={addTag}>
-            Hozzáad
+            Add
           </button>
         </div>
         <div className="form-group">
-          <label>Kiválasztott tagok:</label>
+          <label htmlFor="selectedUsers">Selected Users:</label>
           <ul>
-            {selectedTags.map((tag, index) => (
+            {selectedUsers.map((user, index) => (
               <li key={index}>
-                {tag}{' '}
-                <button
-                  type="button"
-                  onClick={() => removeTag(tag)}
-                >
-                  Törlés
+                {user}
+                <button type="button" onClick={() => removeTag(user)}>
+                  Delete
                 </button>
               </li>
             ))}
           </ul>
         </div>
-        <button type="submit">Mentés</button>
+        <div className="form-group">
+          <label htmlFor="currency">Currency:</label>
+          <select
+            id="currency"
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value)}
+            required
+          >
+            <option value="" disabled>
+              Select...
+            </option>
+            <option value="HUF">HUF</option>
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="googleMapsUrl">Google Maps URL:</label>
+          <input
+            type="text"
+            id="googleMapsUrl"
+            value={googleMapsUrl}
+            onChange={(e) => setGoogleMapsUrl(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="selectedPayer">Who payed:</label>
+          <select
+            id="selectedPayer"
+            value={selectedPayer}
+            onChange={(e) => setSelectedPayer(Number(e.target.value))}
+            required
+          >
+            <option value="" disabled>
+              Select...
+            </option>
+            {usersList.map((user) => (
+              <option key={user.id} value={user.id}>
+                {user.username}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button type="submit">Save</button>
       </form>
     </div>
   );

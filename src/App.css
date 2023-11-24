@@ -1,6 +1,5 @@
 /* Add these styles to your CSS */
 .App {
-  position: relative;
 }
 
 .Dropdown {
@@ -16,31 +15,4 @@
   box-shadow: 0px 1px 1px #5C5696;
 }
 
-.DropdownButton {
-  padding: 10px;
-  cursor: pointer;
-}
 
-.DropdownContent {
-  display: none;
-  position: absolute;
-  background: #fff;
-  width: fit-content;
-  border-radius: 0px 0px 5px 5px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-}
-
-.Dropdown.Open .DropdownContent {
-  display: block;
-}
-
-.DropdownContent a {
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.DropdownContent a:hover {
-  background-color: #f1f1f1;
-}

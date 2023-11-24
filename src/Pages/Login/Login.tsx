@@ -11,6 +11,10 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  localStorage.setItem("username", "");
+  localStorage.setItem("groupId", "");
+  localStorage.setItem("itemId", "");
+  localStorage.setItem("userId", "");
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
@@ -54,7 +58,13 @@ function Login() {
     };
 
     axios
-      .post('http://localhost:8080/login', user)
+      .post('http://localhost:8080/login', user,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+      )
       .then((response) => {
         if (response.status === 202) {
           navigate('/Groups');
@@ -63,6 +73,7 @@ function Login() {
         }
       })
       .catch((error) => {
+        console.error("Hiba történt:", error);
         toast.error(error, {
           position: 'top-center',
           autoClose: 5000,
@@ -76,6 +87,8 @@ function Login() {
 
   return (
     <div className="container">
+      
+
       <div className="screen">
         <div className="screen__content">
           <form className="login" onSubmit={handleSubmit}>

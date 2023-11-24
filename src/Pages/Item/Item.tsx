@@ -12,7 +12,7 @@ function Item() {
     price: null,
     description: "",
     currency: "" ,
-    googleMapsURL: ""
+    mapUrl: ""
   });
 
 
@@ -29,6 +29,8 @@ function Item() {
 
         const itemsData = response.data;
         setItem(itemsData);
+        
+        console.log(itemsData.googleMapsURL)
       } catch (error) {
         console.error('Hiba történt a kérés során:', error);
       }
@@ -41,19 +43,11 @@ function Item() {
   return (
     <div className="item-container">
       <h1>{item.name}</h1>
-      <p>Ár: {item.price}  {item.currency}</p>
+      <p>Price: {item.price}  {item.currency}</p>
       <div>{item.description}</div>
-      <div className="map-container">
-        <iframe
-          title="Google Maps"
-          width="400"
-          height="500"
-          src={item.googleMapsURL}
-          frameBorder="0"
-          style={{ border: "0" }}
-          allowFullScreen
-        ></iframe>
-      </div>
+      {item.mapUrl && (
+        <a href={item.mapUrl} target='_blank' className="map-link">Watch on map</a>
+      )}
     </div>
   );
 }

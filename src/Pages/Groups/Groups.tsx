@@ -9,7 +9,14 @@ function Groups() {
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [groups, setGroups] = useState<{ id: number; groupName: string }[]>([]);
+
+  const username = localStorage.getItem("username");
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -29,28 +36,49 @@ function Groups() {
 
     fetchGroups();
   }, [userId]);
-
-  const handleCircleButtonClick = () => {
-    navigate('/newGroup');
-  };
-
-  const handleGroupButtonClick = (groupId : number) => {
+ 
+  const handleGroupButtonClick = (groupId: number) => {
     localStorage.setItem("groupId", String(groupId));
     navigate('/Group');
   };
 
+  const handleProfileButtonClick = () => {
+    navigate("/Profile");
+  }
+
+  const handleLogOutButtonClick = () =>{
+    localStorage.clear();
+    navigate("/")
+  }
+
+
+
   return (
-    <div>
+    <div className="list-container">
+      <div className="App">
+        <div className={`Dropdown ${isDropdownOpen ? 'Open' : ''}`}>
+          <div className="DropdownButton" onClick={toggleDropdown}>
+            {username}
+          </div>
+          <div className="DropdownContent">
+            <button onClick={handleProfileButtonClick}>Profil</button>
+            <button onClick={handleLogOutButtonClick}>Kilépés</button>
+          </div>
+        </div>
+      </div>
       <Link to={'/newGroup'}>
         <button className='newGroup'>New Group</button>
       </Link>
-      <ul>
-        {groups.map(group => (
-          <li key={group.id}>
-            <button onClick={() => handleGroupButtonClick(group.id)}>{group.groupName}</button>
-          </li>
-        ))}
-      </ul>
+      
+      <div className="dynamic-height-container" style={{ height: Math.min(1000, groups.length * 50) + 'px', overflowY: 'auto' }}>
+        <ul>
+          {groups.map(group => (
+            <li key={group.id}>
+              <button onClick={() => handleGroupButtonClick(group.id)}>{group.groupName}</button>
+            </li>
+          ))}
+        </ul>
+      </div>      
     </div>
   );
 }
