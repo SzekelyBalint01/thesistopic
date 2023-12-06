@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function Group() {
   const groupId = localStorage.getItem("groupId");
   const navigate = useNavigate();
-  const [userList, setUserList] = useState<{ id: number; username: string }[]>([]);
+  const [userList, setUserList] = useState<{ id: number; username: string, debt: number}[]>([]);
 
   const [email, setEmail] = useState('');
   const [items, setItems] = useState<{ id: number; name: string; price: number; currency: string; mapUrl: string; description: string }[] | null>(null);
@@ -47,6 +47,7 @@ function Group() {
         const response = await axios.get('http://localhost:8080/getAllGroupUser', {
           params: {
             groupId: Number(groupId),
+            userId: Number(localStorage.getItem('userId'))
           },
         });
 
@@ -102,7 +103,7 @@ function Group() {
             autoClose: 5000, // Disable auto close
           });
           
-          setUserList(prevUserList => [...prevUserList, { id: response.data.id, username: response.data.username }]);
+          setUserList(prevUserList => [...prevUserList, { id: response.data.id, username: response.data.username, debt: response.data.debt }]);
 
         }
         setEmail(''); // Tisztítjuk az input mezőt
@@ -163,7 +164,7 @@ function Group() {
       <div className='UsersDisplay'>
         <ul>
           {userList.map((user, index) => (
-            <li key={index}>{user.username}</li>
+            <li key={index}>{user.username} {user.debt}</li>
           ))}
         </ul>
       </div>
