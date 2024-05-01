@@ -14,25 +14,25 @@ function NewItem() {
   const [name, setName] = useState('');
   const [value, setValue] = useState<number | ''>('');
   const [description, setDescription] = useState('');
-  const [selectedUser, setSelectedTag] = useState<string>('');
-  const [selectedUsers, setSelectedTags] = useState<string[]>([]);
+  const [selectedUser, setSelectedTag] = useState<number | ''>(''); // Módosítva: number típus
+  const [selectedUsers, setSelectedTags] = useState<number[]>([]); // Módosítva: number[] típus
   const [currency, setCurrency] = useState<string>('');
   const [googleMapsUrl, setGoogleMapsUrl] = useState<string>('');
   const location = useLocation();
   const usersList: User[] = location.state ? location.state.userList : [];
   const groupId = localStorage.getItem('groupId');
-  const [selectedPayer, setSelectedPayer] = useState<number | ''>('');
+  const [selectedPayer, setSelectedPayer] = useState<number | ''>(''); // Módosítva: number típus
 
   const navigate = useNavigate();
 
   const addTag = () => {
-    if (selectedUser && !selectedUsers.includes(selectedUser)) {
-      setSelectedTags([...selectedUsers, selectedUser]);
-      setSelectedTag('');
+    if (selectedUser && !selectedUsers.includes(selectedUser as number)) { // Módosítva: selectedUser-t number-re castolva
+      setSelectedTags([...selectedUsers, selectedUser as number]); // Módosítva: selectedUser-t number-re castolva
+      setSelectedTag('' as unknown as number); // Módosítva: selectedUser-t number-re castolva és resetelve
     }
   };
 
-  const removeTag = (tagToRemove: string) => {
+  const removeTag = (tagToRemove: number) => { // Módosítva: tagToRemove-t number-re változtatva
     const updatedTags = selectedUsers.filter((tag) => tag !== tagToRemove);
     setSelectedTags(updatedTags);
   };
@@ -40,7 +40,7 @@ function NewItem() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const extractedUserIds = usersList.map((user) => user.id);
+    const extractedUserIds = selectedUsers;
 
     const newItemData = {
       groupId: groupId,
@@ -50,7 +50,7 @@ function NewItem() {
       users: extractedUserIds,
       currency: currency,
       mapUrl: googleMapsUrl,
-      paidBy: selectedPayer !== '' ? selectedPayer : null,
+      paidBy: selectedPayer,
     };
 
     axios
@@ -79,17 +79,19 @@ function NewItem() {
     setName('');
     setValue('');
     setDescription('');
-    setSelectedTag('');
+    setSelectedTag('' as unknown as number); // Módosítva: selectedUser-t number-re castolva és resetelve
     setSelectedTags([]);
     setCurrency('');
     setGoogleMapsUrl('');
-    setSelectedPayer('');
+    setSelectedPayer('' as unknown as number); // Módosítva: selectedPayer-t number-re castolva és resetelve
   };
 
   return (
     <div>
+      <div className='form-container'>
+      <form onSubmit={handleSubmit} className='newItemForm'>
+
       <h1>New Item</h1>
-      <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Név:</label>
           <input
@@ -126,13 +128,13 @@ function NewItem() {
           <select
             id="tags"
             value={selectedUser}
-            onChange={(e) => setSelectedTag(e.target.value)}
+            onChange={(e) => setSelectedTag(Number(e.target.value))} // Módosítva: selectedUser-t number-re castolva
           >
             <option value="" disabled>
               Select...
             </option>
             {usersList.map((user) => (
-              <option key={user.id} value={user.username}>
+              <option key={user.id} value={user.id}> {/* Módosítva: value={user.id} */}
                 {user.username}
               </option>
             ))}
@@ -144,10 +146,10 @@ function NewItem() {
         <div className="form-group">
           <label htmlFor="selectedUsers">Selected Users:</label>
           <ul>
-            {selectedUsers.map((user, index) => (
+            {selectedUsers.map((userId, index) => ( // Módosítva: user -> userId
               <li key={index}>
-                {user}
-                <button type="button" onClick={() => removeTag(user)}>
+                {usersList.find(user => user.id === userId)?.username} {/* Módosítva: user-t userId-re */}
+                <button type="button" onClick={() => removeTag(userId)}> {/* Módosítva: user-t userId-re */}
                   Delete
                 </button>
               </li>
@@ -199,6 +201,7 @@ function NewItem() {
         </div>
         <button type="submit">Save</button>
       </form>
+      </div>
     </div>
   );
 }

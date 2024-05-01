@@ -44,15 +44,6 @@ h1 {
   text-align: center;
 }
 
-h2 {
-  margin-top: 10rem;
-  margin-left: 3rem;
-  border-style: solid;
-  border-color: #e5e500;
-  border-width: 0.3rem;
-  border-radius: 15px;
-  width: fit-content;
-}
 
 .list-container {
   display: flex;

@@ -1,4 +1,14 @@
 /* NewGroup.css */
+h2{
+  margin-bottom: 30px;
+}
+
+.new-group-form{
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
 
 .new-group-container {
     display: flex;

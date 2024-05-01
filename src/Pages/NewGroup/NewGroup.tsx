@@ -38,7 +38,7 @@ function NewGroup() {
   return (
     <div className="new-group-container">
       <h2>Create a New Group</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='new-group-form'>
         <div className="input-container">
           <input
             type="text"

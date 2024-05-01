@@ -1,5 +1,17 @@
 /* Add these styles to your CSS */
 .App {
+
+}
+html,body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("../public/roadbg.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+   
 }
 
 .Dropdown {

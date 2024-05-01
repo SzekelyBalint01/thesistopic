@@ -1,0 +1,28 @@
+.form-container{
+    display: flex;
+    justify-content: center;
+    border-radius: 20px;
+    /* align-content: center; */
+    width: 100vw;
+}
+
+.newItemForm{
+    background-color:  #6C63AC;
+    border-radius: 20px;
+    margin-top: 8rem;
+    height: 600px;
+    width: 400px;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.form-group{
+    margin-bottom: 30px;
+}
+
+h1{
+    margin-bottom: 30px;
+}
