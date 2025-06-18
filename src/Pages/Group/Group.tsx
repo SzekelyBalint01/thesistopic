@@ -15,20 +15,18 @@ function Group() {
 
   const [email, setEmail] = useState('');
   const [items, setItems] = useState<{ id: number; name: string; price: number; currency: string; mapUrl: string; description: string }[] | null>(null);
-  const [selectedCurrency, setSelectedCurrency] = useState("HUF"); // State for selected currency
+  const [selectedCurrency, setSelectedCurrency] = useState("HUF"); 
 
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
-  // Function to toggle dropdown visibility
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
 
-    // Function to handle currency selection
+ 
 const handleCurrencySelect = (currency: { value: string; label: string }) => {
   setSelectedCurrency(currency.value);
-  // Update dropdown button text to selected currency
   const dropdownButton = document.getElementById('dropdown-button');
   if (dropdownButton) {
     dropdownButton.innerText = currency.label;
@@ -51,7 +49,7 @@ const handleCurrencySelect = (currency: { value: string; label: string }) => {
           
         } else {
           console.error('Response is null or invalid:', response);
-          setItems(null); // or setItems([]) if an empty array is more appropriate
+          setItems(null); 
           
         }
       } catch (error) {
@@ -79,7 +77,7 @@ const handleCurrencySelect = (currency: { value: string; label: string }) => {
           console.log(userList)
         } else {
           console.error('Response is null or invalid:', response);
-          setItems(null); // or setItems([]) if an empty array is more appropriate
+          setItems(null); 
           
         }
         
@@ -98,13 +96,13 @@ const handleCurrencySelect = (currency: { value: string; label: string }) => {
 
   const handleAddUser = async () => {
     try {
-      // Küldjük el a POST kérést
+      
       const response = await axios.post('http://localhost:8080/addUserToGroup', {
-        email: email,  // Például a felhasználói azonosító
+        email: email,
         groupId: groupId
       });
         
-      // Ellenőrizzük, hogy a válasz státuszkódja 200-e
+      
       if (response.status === 200) {
         if(response.data.message==="User does not exists or already exists"){
           toast.error(() => (
@@ -113,7 +111,7 @@ const handleCurrencySelect = (currency: { value: string; label: string }) => {
             </div>
           ), {
             position: 'top-center',
-            autoClose: 5000, // Disable auto close
+            autoClose: 5000, 
           });
         }else{
           toast.success(() => (
@@ -123,13 +121,13 @@ const handleCurrencySelect = (currency: { value: string; label: string }) => {
             
           ), {
             position: 'top-center',
-            autoClose: 5000, // Disable auto close
+            autoClose: 5000, 
           });
           
           setUserList(prevUserList => [...prevUserList, { id: response.data.id, username: response.data.username, debt: response.data.debt , owe: response.data.owe}]);
           
         }
-        setEmail(''); // Tisztítjuk az input mezőt
+        setEmail(''); 
       } else {
         toast.error(() => (
           <div>
@@ -137,7 +135,7 @@ const handleCurrencySelect = (currency: { value: string; label: string }) => {
           </div>
         ), {
           position: 'top-center',
-          autoClose: 5000, // Disable auto close
+          autoClose: 5000, 
         });
 
         featureGroup();
@@ -150,7 +148,7 @@ const handleCurrencySelect = (currency: { value: string; label: string }) => {
         </div>
       ), {
         position: 'top-center',
-        autoClose: 5000, // Disable auto close
+        autoClose: 5000, 
       });
     }
   };
@@ -167,7 +165,7 @@ const handleCurrencySelect = (currency: { value: string; label: string }) => {
        <button id="dropdown-button" onClick={toggleDropdown} className="dropbtn">
   {selectedCurrency}
 </button>
-        {/* Dropdown content */}
+        {}
         {dropdownVisible && (
           <div className="dropdown-content">
            <a href="#" onClick={() => handleCurrencySelect({value: "HUF", label: "HUF"})}>HUF</a>
@@ -214,7 +212,7 @@ const handleCurrencySelect = (currency: { value: string; label: string }) => {
       })}
     </ul>
   </div>
-  <hr /> {/* Elválasztó vonal */}
+  <hr /> {}
   <div className="owe-list">
     <h3>Owe List</h3>
     <ul>

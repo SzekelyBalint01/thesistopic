@@ -14,10 +14,10 @@ function NewGroup() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // Send the groupName to your Spring Boot API using Axios
+   
     axios.post('http://localhost:8080/createGroup', { groupName }, {
     headers: {
-      'Content-Type': 'application/json', // Állítsd be a megfelelő Content-Type értéket
+      'Content-Type': 'application/json', 
     },
     params: {
       userId: userId,
@@ -31,7 +31,7 @@ function NewGroup() {
       })
       .catch((error) => {
         console.error('Group creation failed:', error);
-        // Handle errors, show an error message, etc.
+       
       });
   };  
 

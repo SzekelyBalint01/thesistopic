@@ -14,25 +14,24 @@ function NewItem() {
   const [name, setName] = useState('');
   const [value, setValue] = useState<number | ''>('');
   const [description, setDescription] = useState('');
-  const [selectedUser, setSelectedTag] = useState<number | ''>(''); // Módosítva: number típus
-  const [selectedUsers, setSelectedTags] = useState<number[]>([]); // Módosítva: number[] típus
+  const [selectedUser, setSelectedTag] = useState<number | ''>(''); 
+  const [selectedUsers, setSelectedTags] = useState<number[]>([]); 
   const [currency, setCurrency] = useState<string>('');
   const [googleMapsUrl, setGoogleMapsUrl] = useState<string>('');
   const location = useLocation();
   const usersList: User[] = location.state ? location.state.userList : [];
   const groupId = localStorage.getItem('groupId');
-  const [selectedPayer, setSelectedPayer] = useState<number | ''>(''); // Módosítva: number típus
-
+  const [selectedPayer, setSelectedPayer] = useState<number | ''>(''); 
   const navigate = useNavigate();
 
   const addTag = () => {
-    if (selectedUser && !selectedUsers.includes(selectedUser as number)) { // Módosítva: selectedUser-t number-re castolva
-      setSelectedTags([...selectedUsers, selectedUser as number]); // Módosítva: selectedUser-t number-re castolva
-      setSelectedTag('' as unknown as number); // Módosítva: selectedUser-t number-re castolva és resetelve
+    if (selectedUser && !selectedUsers.includes(selectedUser as number)) { 
+      setSelectedTags([...selectedUsers, selectedUser as number]); 
+      setSelectedTag('' as unknown as number); 
     }
   };
 
-  const removeTag = (tagToRemove: number) => { // Módosítva: tagToRemove-t number-re változtatva
+  const removeTag = (tagToRemove: number) => { 
     const updatedTags = selectedUsers.filter((tag) => tag !== tagToRemove);
     setSelectedTags(updatedTags);
   };
@@ -75,15 +74,14 @@ function NewItem() {
 
     console.log('New item:', newItemData);
 
-    // Reset form fields and selected users
     setName('');
     setValue('');
     setDescription('');
-    setSelectedTag('' as unknown as number); // Módosítva: selectedUser-t number-re castolva és resetelve
+    setSelectedTag('' as unknown as number); 
     setSelectedTags([]);
     setCurrency('');
     setGoogleMapsUrl('');
-    setSelectedPayer('' as unknown as number); // Módosítva: selectedPayer-t number-re castolva és resetelve
+    setSelectedPayer('' as unknown as number); 
   };
 
   return (
@@ -128,13 +126,13 @@ function NewItem() {
           <select
             id="tags"
             value={selectedUser}
-            onChange={(e) => setSelectedTag(Number(e.target.value))} // Módosítva: selectedUser-t number-re castolva
+            onChange={(e) => setSelectedTag(Number(e.target.value))} 
           >
             <option value="" disabled>
               Select...
             </option>
             {usersList.map((user) => (
-              <option key={user.id} value={user.id}> {/* Módosítva: value={user.id} */}
+              <option key={user.id} value={user.id}> {}
                 {user.username}
               </option>
             ))}
@@ -146,10 +144,10 @@ function NewItem() {
         <div className="form-group">
           <label htmlFor="selectedUsers">Selected Users:</label>
           <ul>
-            {selectedUsers.map((userId, index) => ( // Módosítva: user -> userId
+            {selectedUsers.map((userId, index) => ( 
               <li key={index}>
-                {usersList.find(user => user.id === userId)?.username} {/* Módosítva: user-t userId-re */}
-                <button type="button" onClick={() => removeTag(userId)}> {/* Módosítva: user-t userId-re */}
+                {usersList.find(user => user.id === userId)?.username} {}
+                <button type="button" onClick={() => removeTag(userId)}> {}
                   Delete
                 </button>
               </li>

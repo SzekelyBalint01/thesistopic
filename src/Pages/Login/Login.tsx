@@ -26,17 +26,16 @@ function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Hitelesítési hibakezelő hozzáadása az Axios klienshez
+    
     const authInterceptor = axios.interceptors.response.use(
       (response) => {
         return response;
       },
       (error) => {
         if (error.response && error.response.status === 401) {
-          // Hitelesítési hiba (401) esetén toast üzenet megjelenítése
           toast.error('Wrong Email or Password', {
             position: 'top-center',
-            autoClose: 5000, // Toast eltűnési ideje
+            autoClose: 5000, 
           });
         }
         return Promise.reject(error);
@@ -44,14 +43,12 @@ function Login() {
     );
 
     return () => {
-      // Hitelesítési hibakezelő eltávolítása a komponens megszűnéskor
       axios.interceptors.response.eject(authInterceptor);
     };
   }, []);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // Create a user object with the form data
     const user = {
       email,
       password,

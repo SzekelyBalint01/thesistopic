@@ -12,7 +12,7 @@ function Item() {
 
   const navigate = useNavigate();
 
-  // Példaadatok
+
   const [item, setItem] = useState({
     name: "",
     price: null,
@@ -52,7 +52,7 @@ function Item() {
 
   useEffect(() => {
     
-    // Az adatok lekérése az oldal betöltése után
+
     const fetchGroup = async () => {
       try {
         const response = await axios.get('http://localhost:8080/getItem', {
@@ -69,10 +69,8 @@ function Item() {
         console.error('Hiba történt a kérés során:', error);
       }
     };
-
-    // Meghívjuk a fetchGroup függvényt az "useEffect" segítségével
     fetchGroup();
-  }, [itemId]); // Az "useEffect" akkor fut le, amikor a groupId megváltozik
+  }, [itemId]); 
 
   return (
     <div className='item-container'>

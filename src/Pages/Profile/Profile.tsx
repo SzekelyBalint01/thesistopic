@@ -20,7 +20,7 @@ function Profile() {
           },
         });
 
-        // Update the state variables with the data from the response
+       
         setEmail(response.data.email);
         setUsername(response.data.username);
 
@@ -41,7 +41,7 @@ function Profile() {
   };
 
   const handleSave = () => {
-    // Send a PUT request to update user data on the server
+  
     const userData = { email, username, userId };
     axios.put('http://localhost:8080/saveProfile', userData)
       .then((response) => {
@@ -50,7 +50,7 @@ function Profile() {
             <div>User data updated successfully! Please Re-login.</div>
             <button
               onClick={() => {
-                toast.dismiss(); // Close the toast
+                toast.dismiss(); 
                 navigate('/');
               }}
             >
@@ -59,7 +59,7 @@ function Profile() {
           </div>
         ), {
           position: 'top-center',
-          autoClose: false, // Disable auto close
+          autoClose: false, 
         });
       })
       .catch((error) => {

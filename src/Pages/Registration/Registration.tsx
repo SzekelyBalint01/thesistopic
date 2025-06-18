@@ -32,7 +32,7 @@ function Registration() {
   };
 
   const comparePasswords = (confirmPasswordValue: string) => {
-    // Az összehasonlítás és a state frissítése
+
     if (password !== confirmPasswordValue) {
       setPasswordsMatch(false);
     } else {
@@ -50,7 +50,6 @@ function Registration() {
       return;
     }
 
-    // Create a user object with the form data
     const user = {
       email,
       password,
