@@ -6,12 +6,6 @@
 	padding: 0;	
 	font-family: Raleway, sans-serif;
 }
-
-
-body {
-	background: linear-gradient(90deg, #C7C5F4, #776BCC);		
-}
-
   
 .container {
 	display: flex;
@@ -23,9 +17,10 @@ body {
 
 .screen {				
 	position: relative;	
+	background-color: #4C489D;
 	height: 800px;
 	width: 560px;	
-	box-shadow: 0px 0px 24px #5C5696;
+	box-shadow: 0px 0px 10px #5C5696;
 }
 
 .screen__content {

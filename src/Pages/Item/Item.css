@@ -1,12 +1,21 @@
-/* NewGroup.css */
+.item-containeer{
+  display: flex;
+}
 
-.new-group-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
+
+.item-containeer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 500px;
+  background-color:  #6C63AC;
+  padding-left: 30px;
+  padding-right: 30px;
+  border-radius: 25px;
+  width: max-content;
+  height: 500px;
+}
   
   
   button {
