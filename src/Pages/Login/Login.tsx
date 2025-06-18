@@ -73,12 +73,14 @@ function Login() {
         }
       })
       .catch((error) => {
-        console.error("Hiba történt:", error);
-        toast.error(error, {
-          position: 'top-center',
-          autoClose: 5000,
-        });
-      });
+  console.error("Hiba történt:", error);
+  const message = "Username or password is invalid"
+  toast.error(message, {
+    position: 'top-center',
+    autoClose: 5000,
+  });
+});
+
   };
 
   function handleRegistrationOnClick(): void {
@@ -97,7 +99,7 @@ function Login() {
               <input
                 type="text"
                 className="login__input"
-                placeholder="User name / Email"
+                placeholder="Email"
                 id="email"
                 name="email"
                 value={email}

@@ -72,7 +72,9 @@ function Registration() {
         }
       })
       .catch((error) => {
-        toast.error(error, {
+        console.error("Hiba történt:", error);
+        const message = "User already exsist"
+        toast.error(message, {
           position: 'top-center',
           autoClose: 5000,
         });

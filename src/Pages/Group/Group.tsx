@@ -6,6 +6,7 @@ import axios from 'axios';
 import './Group.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { featureGroup } from 'leaflet';
 
 function Group() {
   const groupId = localStorage.getItem("groupId");
@@ -104,7 +105,7 @@ function Group() {
           });
           
           setUserList(prevUserList => [...prevUserList, { id: response.data.id, username: response.data.username, debt: response.data.debt }]);
-
+        
         }
         setEmail(''); // Tisztítjuk az input mezőt
       } else {
@@ -116,6 +117,8 @@ function Group() {
           position: 'top-center',
           autoClose: 5000, // Disable auto close
         });
+
+        featureGroup();
       }
     } catch (error) {
       console.error('Hiba történt a kérés során:', error);
